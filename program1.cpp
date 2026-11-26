@@ -1,161 +1,160 @@
-#include<iostream>
-#include<vector>
-#include<string>
+
+#include <iostream>
 using namespace std;
- class household
- {
-    private:
-    string id;
-    string head;
-    string address;
-    int members;
-    string contact;
-    string status;
-    public:
-    household()
-    {
-    id=" ";
-    head=" ";
-    address=" ";
-    members=0;
-    contact=" ";
-    status="active";
-    }
-    void registerhousehold(string houseid)
-    {
-      id=houseid;
-      cout<<"Enter the headname: ";
-      getline(cin,head);
-      cout<<"Enter the address/Block Number: ";
-      getline(cin,address);
-      cout<<"Enter the number of members: ";
-      cin>>members;
-      cin.ignore();
-      cout<<"Enter contact Number: ";
-      getline(cin,contact);
-      status="active";
-      cout<<"\nHousehold register successfully ";
-    }
-    void display()
-    {
-    cout<<"HouseHold ID                 : "<<id;
-    cout<<"\nHeadname                   :"<<head;
-    cout<<"\nThe address/Block number is: "<<address;
-    cout<<"\nThe Number of members      : "<<members;
-    cout<<"\nThe contact number is      : "<<contact;
-    cout<<"\nStatus                     : "<<status;   
- }
- bool search(string key)
- {
-    return(id==key||head==key);
- }
- void modify()
- {
-    cout<<"\nEnter the New Head Name      : ";
-    getline(cin,head);
-    cout<<"\nEnter the New address        : ";
-    getline(cin,address);
-    cout<<"\nEnter the New Number  of members: ";
-    cin>>members;
-    cout<<"\nEnter the New Contact number  : ";
-    getline(cin,contact);
-    cout<<"\nHouseHold details updated";
-}
-string getid()
+struct Household
 {
-    return id;
+    string id, name, address, contact, status;
+    int members;
+};
+Household h[100];
+int count = 0;
+void addHousehold()
+{
+    cout << "\nEnter ID: ";
+    cin >> h[count].id;
+    for (int i = 0; i < count; i++)
+    {
+        if (h[i].id == h[count].id)
+        {
+            cout << "ID already exists!\n";
+            return;
+        }
+    }
+    cout << "Enter Name: ";
+    cin >> h[count].name;
+    cout << "Enter Address: ";
+    cin >> h[count].address;
+    cout << "Enter Number of Members: ";
+    cin >> h[count].members;
+    cout << "Enter Contact Number: ";
+    cin >> h[count].contact;
+    cout << "Enter Status: ";
+    cin >> h[count].status;
+    count++;
+    cout << "Household Added Successfully!\n";
 }
- };
+void display()
+{
+    if (count == 0)
+    {
+        cout << "\nNo Records Found!\n";
+        return;
+    }
+    for (int i = 0; i < count; i++)
+    {
+        cout << "\nID: " << h[i].id;
+        cout << "\nName: " << h[i].name;
+        cout << "\nAddress: " << h[i].address;
+        cout << "\nMembers: " << h[i].members;
+        cout << "\nContact: " << h[i].contact;
+        cout << "\nStatus: " << h[i].status << "\n";
+    }
+}
+void search()
+{
+    string id;
+    cout << "\nEnter ID to Search: ";
+    cin >> id;
+    for (int i = 0; i < count; i++)
+    {
+        if (h[i].id == id || h[i].name == id)
+        {
+            cout << "\nRecord Found!";
+            cout << "\nID: " << h[i].id;
+            cout << "\nName: " << h[i].name;
+            cout << "\nAddress: " << h[i].address;
+            cout << "\nMembers: " << h[i].members;
+            cout << "\nContact: " << h[i].contact;
+            cout << "\nStatus: " << h[i].status << "\n";
+            return;
+        }
+    }
+    cout << "Record Not Found!\n";
+}
+void modify()
+{
+    string id;
+    cout << "\nEnter ID to Modify: ";
+    cin >> id;
+    for (int i = 0; i < count; i++)
+    {
+        if (h[i].id == id)
+        {
+            cout << "Enter New Name: ";
+            cin >> h[i].name;
+            cout << "Enter New Address: ";
+            cin >> h[i].address;
+            cout << "Enter New Members: ";
+            cin >> h[i].members;
+            cout << "Enter New Contact: ";
+            cin >> h[i].contact;
+            cout << "Record Updated!\n";
+            return;
+        }
+    }
+    cout << "Record Not Found!\n";
+}
+void deleteHousehold()
+{
+    string id;
+    cout << "\nEnter ID to Delete: ";
+    cin >> id;
+    for (int i = 0; i < count; i++)
+    {
+        if (h[i].id == id)
+        {
+            for (int j = i; j < count - 1; j++)
+                h[j] = h[j + 1];
+            count--;
+            cout << "Record Deleted!\n";
+            return;
+        }
+    }
+    cout << "Record Not Found!\n";
+}
+void changeStatus()
+{
+    string id;
+    cout << "\nEnter ID: ";
+    cin >> id;
+    for (int i = 0; i < count; i++)
+    {
+        if (h[i].id == id)
+        {
+            cout << "Enter New Status (Active/Inactive): ";
+            cin >> h[i].status;
+            cout << "Status Changed!\n";
+            return;
+        }
+    }
+    cout << "Record Not Found!\n";
+}
 int main()
 {
-  household h[50];
-  int count=0;
-  int choice;
-   string key;
-   do 
-   {
-    cout<<"\n-----------SMART WATER MANAGEMENT--------------";
-    cout<<"\n1.register";
-    cout<<"\n2.Display all households";
-    cout<<"\n3.search Households";
-    cout<<"\n4.Modify Households";
-    cout<<"\n5.Delete households";
-    cout<<"\n6.Activate connection";
-    cout<<"\n7.Deactivate connection";
-    cout<<"\n8.Exit";
-    cout<<"\n\nEnter your choice: ";
-    cin>>choice;
-    cin.ignore();
-    switch(choice)
+    int choice;
+    do
     {
-        case 1: 
+        cout << "\n===== HOUSEHOLD MANAGEMENT =====";
+        cout << "\n1. Add Household";
+        cout << "\n2. Modify Household";
+        cout << "\n3. Delete Household";
+        cout << "\n4. Search Household";
+        cout << "\n5. Display Households";
+        cout << "\n6. Change Status";
+        cout << "\n7. Exit";
+        cout << "\nEnter Your Choice: ";
+        cin >> choice;
+        switch (choice)
         {
-            if(counts>=50)
-            {
-                cout<<"\nHousehold limit reached";
-                break;
-            }
-           
-            cout<<"\nEnter the Household ID: ";
-            getline(cin,key);
-            bool duplicate=false;
-            for(int i=0;i<count;i++)
-            {
-                if(h[i].getid==key)
-                {
-                    duplicate=true;
-                    break;
-                }
-                if(duplicate)
-                {
-                    cout<<"\nThe Household is already resistered";
-                }
-                else{
-                    h[count].registerhousehold(key);
-                    count++;
-                }
-                break;
-            }
-                
-            
+            case 1: addHousehold(); break;
+            case 2: modify(); break;
+            case 3: deleteHousehold(); break;
+            case 4: search(); break;
+            case 5: display(); break;
+            case 6: changeStatus(); break;
+            case 7: cout << "Thank You!"; break;
+            default: cout << "Invalid Choice!";
         }
-        case 2: 
-        {
-            if(count==0)
-            {
-                cout<<"\nNo Household is  found ";
-            }
-            else{
-                for(int i=0;i,count;i++)
-                {
-                    h[i].display();
-                    break;
-                }
-            }
-        }
-        case 3:
-        {
-            cout<<"Enter the Household id to search: ";
-            getline(cin,key);
-            bool found=false;
-            for(int i=0;i<count;i++)
-            {
-                if(h[i].getid()==key)
-                {
-                    h[i].display();
-                    bool found=true;
-                    break;
-                }
-                if(!found)
-                {
-                    cout<<"\nThe household id is not found";
-                }
-            }
-        }
-        case 4:
-        {
-            cout<<"Enter the "
-        }
-    }
-   }
+    } while (choice != 7);
+    return 0;
 }
